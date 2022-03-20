@@ -26,7 +26,6 @@ ALTER PROCEDURE inserir_produto
 @aux int
 AS
 BEGIN
-
 --CONDICIONAL
 IF @aux > 1
 BEGIN
@@ -82,4 +81,3 @@ BEGIN
 END
 
 EXEC exercicio2 "Fabio"
-
