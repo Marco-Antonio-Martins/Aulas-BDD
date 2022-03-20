@@ -1,0 +1,63 @@
+INSERT INTO contatos(nome, telefone) VALUES ('Ana Americo', '63973112121') --Insere uma tupla
+
+select * from contatos where nome like 'Ana%' -- Começa com Ana
+
+select * from contatos where nome like '%o' -- Começa com O
+
+select * from contatos where nome like '%la%' -- em la em qualquer lugar do nome, inclusive inicio e fim
+
+select * from ligacoes where tempo in (80,101,20,480)
+
+select * from contatos,ligacoes --Produto cartesiano com tuplas não válidas - todas as combinações
+
+select * from contatos c,ligacoes l where c.codC = l.codC --Produto cartesiano com tuplas válidas
+
+select * from contatos c
+inner join ligacoes l on c.codC = l.codC --Junção
+
+select nome, dataL from contatos c 
+inner join ligacoes l on c.codC = l.codC 
+
+select nome, dataL from contatos c
+inner join ligacoes l on c.codC = l.codC and nome = 'Ana Banana' -- Pesquisa o nome de Ana Banana e as datas de ligação
+
+select nome, dataL, tempo from contatos c
+inner join ligacoes l on c.codC = l.codC  
+order by tempo -- Pesquisa em ordem crescente 
+
+select nome, dataL, tempo from contatos c
+inner join ligacoes l on c.codC = l.codC  
+order by dataL asc, tempo desc 
+
+-----------Funções de agregação ---------------------------
+
+select count(*) from contatos --retorna quantidade de tuplas de contatos
+select count(*) from ligacoes --retorna qtdade de tuplas de ligações
+select avg(tempo) from ligacoes --retorna a média do tempo das ligações
+
+--retorna a média do tempo das ligações de Ana Banana
+select avg(tempo) as 'Média do tempo' from contatos c
+inner join ligacoes l on l.codC = c.codC and nome = 'Ana Banana'
+
+--retorna a média do tempo das ligações de Ana Banana
+select nome, avg(tempo) as 'Média do tempo' from contatos c
+inner join ligacoes l on l.codC = c.codC and nome = 'Ana Banana'
+group by nome
+
+--retorna a média do tempo das ligações agrupadas por nome
+select nome, avg(tempo) as 'Média do tempo' from contatos c
+inner join ligacoes l on l.codC = c.codC 
+group by nome
+
+--retorna a quantidade de ligações recebidas de cada contato
+--contar as ligações recebidas agrupadas por nome
+select nome, count(*) as 'Qt. Lig. Recebidas' from contatos c
+inner join ligacoes l on l.codC = c.codC and tipo = 'recebida'
+group by nome
+
+--retorna o nome e a quantidade de ligações recebidas de cada contato
+--dos quais foram rebidas 2 ligações ou mais (quantidade)
+select nome, count(*) as 'Qt. Lig. Recebidas' from contatos c
+inner join ligacoes l on l.codC = c.codC and tipo = 'recebida'
+group by nome
+having count(*) > 1
